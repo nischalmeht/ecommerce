@@ -1,4 +1,5 @@
 const Product = require("../models/product-model");
+const cloudinary = require("../lib/cloudinary");
 
 const getAllProducts = async (req, res) => {
 	try {
@@ -86,6 +87,65 @@ const toggleFeaturedProduct = async (req, res) => {
 		res.status(500).json({ message: "Server error", error: error.message });
 	}
 };
+const getRecommendedProducts = async (req, res) => {
+	try{
+		const products = await Product.aggregate([
+			{ $sample: { size: 4 } },{
+				$project:{
+					_id:1,
+					name:1,
+					price:1,
+					image:1,
+					category:1,
+					description:1,					
+				}
+			}
+		]);
+
+		if (!products.length) {
+			return res.status(404).json({ message: "No products found" });
+		}
+
+		res.json(products);
+	} catch (error) {
+		console.log("Error in getRecommendedProducts controller", error.message);
+		res.status(500).json({ message: "Server error", error: error.message });
+	}
+};
+const featuredProducts=async(req,res)=>{
+	try{
+		let featuredProducts = await redis.get("featured_products");
+		if (featuredProducts) {
+			return res.json(JSON.parse(featuredProducts));
+		}
+		featuredProducts = await Product.find({ isFeatured: true }).lean();
+		if (!featuredProducts) {
+			return res.status(404).json({ message: "No featured products found" });
+		}
+		await redis.set("featured_products", JSON.stringify(featuredProducts));
+		// const featuredProducts = await Product.find({isFeatured:true});
+		res.json(featuredProducts);
+	}catch(error){
+		console.log("Error in featuredProducts controller", error.message);
+		res.status(500).json({ message: "Server error", error: error.message });
+	}
+}
+async function updateFeaturedProductsCache(){
+	try{
+		const featuredProducts = await Product.find({isFeatured:true});
+		redisClient.set("featuredProducts",JSON.stringify(featuredProducts));
+	}catch(error){
+		console.log("Error in updateFeaturedProductsCache controller", error.message);
+		res.status(500).json({ message: "Server error", error: error.message });
+	}
+}
 
 
-module.exports = { getAllProducts, getProductsByCategory , createProduct, deleteProduct};
+module.exports = { 
+	getAllProducts, 
+	getProductsByCategory ,
+	 createProduct, 
+	 deleteProduct,
+	 toggleFeaturedProduct,
+	 featuredProducts,
+	 getRecommendedProducts};

@@ -1,9 +1,11 @@
 const express = require("express");
-const router = express();
-const { addToCart, removeAllFromCart, updateQuantity } = require("../controllers/cartController");
+const router = express.Router(); // Correct usage here
+const { addToCart, removeAllFromCart, updateQuantity, getCartProducts } = require("../controllers/cartController");
+const { protectRoute } = require("../middleware/auth");
 
-router.post("/add-to-cart/:id", addToCart);
-router.post("/remove-all-from-cart", removeAllFromCart);
-router.post("/update-quantity/:id", updateQuantity);
+router.post("/", protectRoute, addToCart);
+router.delete("/", protectRoute, removeAllFromCart);
+router.get("/", protectRoute, getCartProducts);
+router.put("/:id", protectRoute, updateQuantity);
 
 module.exports = router;
