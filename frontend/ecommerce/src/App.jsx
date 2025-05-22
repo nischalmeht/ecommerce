@@ -9,6 +9,7 @@ import { Route, Routes } from 'react-router-dom'
 import Signup from './pages/Signup'
 import HomePage from './pages/HomePage'
 import AdminPage from './pages/AdminPage'
+import CategoryPage from './pages/CategoryPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -25,6 +26,7 @@ function App() {
         <Routes>
         <Route path='/admin' element={<AdminPage />} />
           <Route path='/' element={<HomePage />} />
+          <Route path='/category/:category' element={<CategoryPage />} />
           <Route path='/signup' element={<Signup />} />
           <Route path='/login'element={<LoginPage />} />
 

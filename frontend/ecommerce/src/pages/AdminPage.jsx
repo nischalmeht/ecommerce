@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import useProductStore from "../store/useProductStore";
 import CreateProductForm from "../components/CreateProductForm";
 import ProductList from "../components/ProductList";
+import AnalyticsTab from "../components/AnalyticsTab";
 const tabs = [
     { id: "create", label: "Create Product", icon: PlusCircle },
     { id: "products", label: "Products", icon: ShoppingBasket },
@@ -45,6 +46,7 @@ const AdminPage = () => {
 				</div>
                 {activeTab === "create" && <CreateProductForm />}
                 {activeTab === "products" && <ProductList />}
+                {activeTab === "analytics" && <AnalyticsTab />}
             </div>
         </div>
     )

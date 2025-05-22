@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect } from "react";
 import useProductStore from "../store/useProductStore";
 import CategoryItem from "../components/CategoryItem";
+import FeaturedProducts from '../components/FeaturedProducts';
 // import FeaturedProducts from "../components/FeaturedProducts";
 const categories = [
     { href: "/jeans", name: "Jeans", imageUrl: "/jeans.jpg" },
@@ -34,7 +35,7 @@ const HomePage = () => {
 						<CategoryItem category={category} key={category.name} />
 					))}
 				</div>
-                {/* {!isLoading && products.length > 0 && <FeaturedProducts featuredProducts={products} />} */}
+                {!isLoading && products.length > 0 && <FeaturedProducts featuredProducts={products} />}
             </div>
         </div>
     )
