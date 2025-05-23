@@ -1,18 +1,35 @@
-import { useState } from 'react'
+import { useState ,useEffect} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import LoadingSpinner from './components/LoadingSpinner'
 import LoginPage from './pages/LoginPage'
 import Navbar from './components/Navbar'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes,Navigate } from 'react-router-dom'
 import Signup from './pages/Signup'
 import HomePage from './pages/HomePage'
 import AdminPage from './pages/AdminPage'
 import CategoryPage from './pages/CategoryPage'
+import useUserStore from './store/useUserStore'
+import useCartStore from './store/useCartStore'
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { user, checkAuth, checkingAuth } = useUserStore();
+  const { getCartItems } = useCartStore();
+  // const [count, setCount] = useState(0)
+
+  useEffect(() => {
+		checkAuth();
+	}, [checkAuth]);
+  useEffect(() => {
+		if (!user) return;
+
+		getCartItems();
+	}, [getCartItems, user]);
+
+	if (checkingAuth) return <LoadingSpinner />;
+
 
   return (
     <div className='min-h-screen bg-gray-900 text-white relative overflow-hidden'>
@@ -24,7 +41,11 @@ function App() {
       <div className='relative z-50 pt-20'>
         <Navbar />
         <Routes>
-        <Route path='/admin' element={<AdminPage />} />
+        <Route
+						path='/secret-dashboard'
+						element={user?.role === "admin" ? <AdminPage /> : <Navigate to='/login' />}
+					/>
+        {/* <Route path='/admin' element={<AdminPage />} /> */}
           <Route path='/' element={<HomePage />} />
           <Route path='/category/:category' element={<CategoryPage />} />
           <Route path='/signup' element={<Signup />} />

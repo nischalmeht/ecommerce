@@ -7,6 +7,11 @@ const authRoutes = require("./routes/auth.routes");
 const cartRoutes = require("./routes/cart.routes");
 const productRoutes = require("./routes/product.routes");
 const couponRoutes = require("./routes/coupen.routes");
+// const graphqlHttp = require('express-graphql');
+const { graphqlHTTP } = require('express-graphql');
+const graphqlSchema = require('./graphql/schema');
+
+const graphqlResolver = require('./graphql/resolvers');
 const cors = require("cors");
 dotenv.config();
 const app = express();
@@ -18,6 +23,23 @@ app.use(cors({
   }));
 app.use(express.json({ limit: "10mb" })); // allows you to parse the body of the request
 app.use(cookieParser());
+// app.use('/graphql', graphqlHTTP({
+//     schema: graphqlSchema,
+//     rootValue: graphqlResolver,
+//     graphiql: true, // Enable GraphiQL UI for testing
+//     customFormatErrorFn: function(error) {
+//       if(!error.originalError) {
+//           return error;
+//       }
+//       return {
+//           message: error.message,
+//           data: error.originalError.data || null,
+//           status: error.originalError.statusCode || 500,
+//           locations: error.locations,
+//           path: error.path
+//       };
+//   }
+// }));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);

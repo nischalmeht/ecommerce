@@ -34,7 +34,7 @@ const ProductCard = ({ product }) => {
 					 text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
 					onClick={handleAddToCart}
 				>
-					<ShoppingCart size={22} className='mr-2' />
+					{/* <ShoppingCart size={22} className='mr-2' /> */}
 					Add to cart
 				</button>
 			</div>

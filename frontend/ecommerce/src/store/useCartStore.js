@@ -64,7 +64,16 @@ const useCartStore = create((set, get) => ({
 		get().calculateTotals();
 		toast.success("Coupon removed");
 	},
-
+	getCartItems: async () => {
+		try {
+			const res = await axiosInstance.get("/cart");
+			set({ cart: res.data });
+			get().calculateTotals();
+		} catch (error) {
+			set({ cart: [] });
+			toast.error(error.response.data.message || "An error occurred");
+		}
+	},
 	updateQuantity: async (productId, quantity) => {
 		try {
 			if (quantity <= 0) {

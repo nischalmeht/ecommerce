@@ -134,4 +134,11 @@ const refreshToken = async (req, res) => {
 		res.status(500).json({ message: "Server error", error: error.message });
 	}
 };
-module.exports = { signup, login ,logout,refreshToken};
+ const getProfile = async (req, res) => {
+	try {
+		res.json(req.user);
+	} catch (error) {
+		res.status(500).json({ message: "Server error", error: error.message });
+	}
+};
+module.exports = { signup, login ,logout,refreshToken,getProfile};
